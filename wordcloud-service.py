@@ -21,18 +21,18 @@ except ImportError:
     JIEBA_AVAILABLE = False
     logging.warning("Jieba library or analyse submodule not found. TF-IDF and Chinese processing will fail.")
 
-try:
-    import nltk
-    nltk.data.find('tokenizers/punkt')
-    nltk.data.find('corpora/stopwords')
-    from nltk.corpus import stopwords
-    NLTK_AVAILABLE = True
-    ENGLISH_STOPWORDS = set(stopwords.words('english'))
-    logging.info("NLTK library and data found.")
-except (ImportError, LookupError) as e:
-    NLTK_AVAILABLE = False
-    ENGLISH_STOPWORDS = set(['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now'])
-    logging.warning(f"NLTK not available ({e}). Using basic English stopword list for 'language=en'.")
+# try:
+#     import nltk
+#     nltk.data.find('tokenizers/punkt')
+#     nltk.data.find('corpora/stopwords')
+#     from nltk.corpus import stopwords
+#     NLTK_AVAILABLE = True
+#     ENGLISH_STOPWORDS = set(stopwords.words('english'))
+#     logging.info("NLTK library and data found.")
+# except (ImportError, LookupError) as e:
+#     NLTK_AVAILABLE = False
+#     ENGLISH_STOPWORDS = set(['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now'])
+#     logging.warning(f"NLTK not available ({e}). Using basic English stopword list for 'language=en'.")
 # --- End Text Processing Imports ---
 
 
@@ -68,21 +68,21 @@ except Exception as e:
 app = Flask(__name__)
 
 # --- Text Processing Functions ---
-def process_text_nltk(text, custom_stopwords=None):
-    # (Implementation remains the same)
-    if not NLTK_AVAILABLE:
-        logging.warning("NLTK unavailable, falling back to basic split for tokenization.")
-        text = text.lower(); text = re.sub(r'[^\w\s]', '', text); text = re.sub(r'\d+', '', text)
-        tokens = text.split()
-        stop_words = ENGLISH_STOPWORDS.copy()
-        if custom_stopwords: stop_words.update(sw.lower() for sw in custom_stopwords)
-        words = [word for word in tokens if word and word not in stop_words and len(word) > 1]
-    else:
-        text = text.lower(); tokens = nltk.word_tokenize(text)
-        stop_words = ENGLISH_STOPWORDS.copy()
-        if custom_stopwords: stop_words.update(sw.lower() for sw in custom_stopwords)
-        words = [word for word in tokens if word.isalpha() and word not in stop_words and len(word) > 1]
-    return Counter(words)
+# def process_text_nltk(text, custom_stopwords=None):
+#     # (Implementation remains the same)
+#     if not NLTK_AVAILABLE:
+#         logging.warning("NLTK unavailable, falling back to basic split for tokenization.")
+#         text = text.lower(); text = re.sub(r'[^\w\s]', '', text); text = re.sub(r'\d+', '', text)
+#         tokens = text.split()
+#         stop_words = ENGLISH_STOPWORDS.copy()
+#         if custom_stopwords: stop_words.update(sw.lower() for sw in custom_stopwords)
+#         words = [word for word in tokens if word and word not in stop_words and len(word) > 1]
+#     else:
+#         text = text.lower(); tokens = nltk.word_tokenize(text)
+#         stop_words = ENGLISH_STOPWORDS.copy()
+#         if custom_stopwords: stop_words.update(sw.lower() for sw in custom_stopwords)
+#         words = [word for word in tokens if word.isalpha() and word not in stop_words and len(word) > 1]
+#     return Counter(words)
 
 def process_text_mixed_chinese_english(text, combined_stopwords):
     # (Implementation remains the same)
@@ -220,8 +220,8 @@ def generate_wordcloud_route():
             if language == 'zh':
                 if not JIEBA_AVAILABLE: return jsonify({"error": "Server config error: Jieba missing for frequency count."}), 503
                 word_counts = process_text_mixed_chinese_english(raw_text, combined_stopwords)
-            elif language == 'en':
-                 word_counts = process_text_nltk(raw_text, custom_stopwords) # NLTK handles its own
+            # elif language == 'en':
+            #      word_counts = process_text_nltk(raw_text, custom_stopwords) # NLTK handles its own
 
             if not word_counts: return jsonify({"error": "No processable words found after frequency counting."}), 400
             frequencies = dict(word_counts)
