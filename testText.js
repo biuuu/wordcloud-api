@@ -83,9 +83,8 @@ async function main() {
             language: 'en',
             width: 1000,
             height: 500,
-            background_color: 'lightblue',
+            background_color: 'white',
             custom_stopwords: ['javascript', 'web'], // Add custom words to ignore
-            font_path: './.local/HarmonyOS_SansSC_Regular.ttf'
         });
         console.log(`English Word Cloud URL: ${resultEn.imageUrl} (Words: ${resultEn.wordCount})`);
 
@@ -93,10 +92,11 @@ async function main() {
         // IMPORTANT: Ensure the font path set in Python supports Chinese!
         const resultZh = await generateWordCloudViaPython(sampleChineseText, {
             language: 'zh',
-            width: 900,
-            height: 600,
-            background_color: '#FFFFE0', // Light yellow
-            font_path: './.local/HarmonyOS_SansSC_Regular.ttf' // Optionally override Python default here
+            shape: 'ellipse', // Specify the shape
+            width: 800, height: 500, // Mask canvas size (rectangular for ellipse)
+            background_color: null, // AliceBlue background (will fill ellipse)
+            mode: 'RGBA', // Still use RGBA if you want clean edges
+            scale: 2
         });
         console.log(`Chinese Word Cloud URL: ${resultZh.imageUrl} (Words: ${resultZh.wordCount})`);
 
