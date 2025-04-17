@@ -42,7 +42,7 @@ OUTPUT_DIR = os.path.join(SCRIPT_DIR, 'generated_images')
 DEFAULT_FONT_PATH = './.local/HarmonyOS_SansSC_Regular.ttf'
 STOPWORDS_FILENAME = 'baidu_stopwords.txt'
 STOPWORDS_FILE_PATH = os.path.join(SCRIPT_DIR, STOPWORDS_FILENAME)
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 if not os.path.exists(OUTPUT_DIR):
     try: os.makedirs(OUTPUT_DIR); logging.info(f"Created output directory: {OUTPUT_DIR}")
     except OSError as e: logging.error(f"Failed to create output directory {OUTPUT_DIR}: {e}", exc_info=True)
