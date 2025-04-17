@@ -9,14 +9,6 @@ wordcloud
 # Chinese text segmentation library (required for language='zh')
 jieba
 
-# Natural Language Toolkit (used for English tokenization and stopwords)
-# Note: After installing nltk, you might need to download its data models.
-# Run python and execute:
-# import nltk
-# nltk.download('punkt')
-# nltk.download('stopwords')
-nltk
-
 # Image processing library (often required by wordcloud for saving images)
 Pillow
 
