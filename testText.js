@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const PYTHON_SERVICE_URL = 'http://localhost:5000'; // Adjust if needed
+const PYTHON_SERVICE_URL = 'http://192.168.33.6:5000'; // Adjust if needed
 
 /**
  * Calls the Python service to generate a word cloud from raw text.
@@ -84,7 +84,8 @@ async function main() {
             width: 1000,
             height: 500,
             background_color: 'lightblue',
-            custom_stopwords: ['javascript', 'web'] // Add custom words to ignore
+            custom_stopwords: ['javascript', 'web'], // Add custom words to ignore
+            font_path: './.local/HarmonyOS_SansSC_Regular.ttf'
         });
         console.log(`English Word Cloud URL: ${resultEn.imageUrl} (Words: ${resultEn.wordCount})`);
 
@@ -94,8 +95,8 @@ async function main() {
             language: 'zh',
             width: 900,
             height: 600,
-            background_color: '#FFFFE0' // Light yellow
-            // font_path: '/path/to/my/ukai.ttc' // Optionally override Python default here
+            background_color: '#FFFFE0', // Light yellow
+            font_path: './.local/HarmonyOS_SansSC_Regular.ttf' // Optionally override Python default here
         });
         console.log(`Chinese Word Cloud URL: ${resultZh.imageUrl} (Words: ${resultZh.wordCount})`);
 
