@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const PYTHON_SERVICE_URL = 'http://192.168.33.6:5000'; // Adjust if needed
+const PYTHON_SERVICE_URL = 'http://localhost:5000'; // Adjust if needed
 
 /**
  * Calls the Python service to generate a word cloud from raw text.
@@ -78,15 +78,15 @@ async function main() {
     `;
 
     try {
-        console.log("\n--- Generating English Word Cloud ---");
-        const resultEn = await generateWordCloudViaPython(sampleEnglishText, {
-            language: 'en',
-            width: 1000,
-            height: 500,
-            background_color: 'white',
-            custom_stopwords: ['javascript', 'web'], // Add custom words to ignore
-        });
-        console.log(`English Word Cloud URL: ${resultEn.imageUrl} (Words: ${resultEn.wordCount})`);
+        // console.log("\n--- Generating English Word Cloud ---");
+        // const resultEn = await generateWordCloudViaPython(sampleEnglishText, {
+        //     language: 'en',
+        //     width: 1000,
+        //     height: 500,
+        //     background_color: 'white',
+        //     custom_stopwords: ['javascript', 'web'], // Add custom words to ignore
+        // });
+        // console.log(`English Word Cloud URL: ${resultEn.imageUrl} (Words: ${resultEn.wordCount})`);
 
         console.log("\n--- Generating Chinese Word Cloud ---");
         // IMPORTANT: Ensure the font path set in Python supports Chinese!
@@ -96,7 +96,8 @@ async function main() {
             width: 800, height: 500, // Mask canvas size (rectangular for ellipse)
             background_color: null, // AliceBlue background (will fill ellipse)
             mode: 'RGBA', // Still use RGBA if you want clean edges
-            scale: 2
+            scale: 2,
+            colormap: 'tab20'
         });
         console.log(`Chinese Word Cloud URL: ${resultZh.imageUrl} (Words: ${resultZh.wordCount})`);
 
