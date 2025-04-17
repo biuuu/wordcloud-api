@@ -69,13 +69,9 @@ async function main() {
         Python is also very popular for backend development and data science. API design is important.
     `;
 
-    const sampleChineseText = `
-        词云（又称文字云或标签云）是文本数据的视觉表示。通常用于描述网站关键字（标签），
-        或可视化自由格式文本。标签通常是单个词语，每个标签的重要性以字体大小或颜色显示。
-        此格式有助于快速感知最突出的术语以确定其相对重要性。但较大的术语可能比较小的术语更难阅读。
-        Python的wordcloud库是生成词云图的常用工具，需要配合jieba进行中文分词。
-        设置正确的字体路径至关重要。微服务架构允许将不同功能模块部署为独立服务。
-    `;
+    const sampleChineseText = `我今天使用了词云生成器，效果很棒。Node.js调用Python服务也很方便。`;
+
+    const customWords = ["词云生成器", "Node.js"];
 
     try {
         // console.log("\n--- Generating English Word Cloud ---");
@@ -92,6 +88,7 @@ async function main() {
         // IMPORTANT: Ensure the font path set in Python supports Chinese!
         const resultZh = await generateWordCloudViaPython(sampleChineseText, {
             language: 'zh',
+            user_dict_words: customWords,
             shape: 'ellipse', // Specify the shape
             width: 800, height: 500, // Mask canvas size (rectangular for ellipse)
             background_color: null, // AliceBlue background (will fill ellipse)

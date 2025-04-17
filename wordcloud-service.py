@@ -142,7 +142,7 @@ def process_text_nltk(text, custom_stopwords=None):
         ]
     return Counter(words)
 
-def process_text_mixed_chinese_english(text, custom_stopwords=None):
+def process_text_mixed_chinese_english(text, custom_stopwords=None, user_dict_words=None):
     """
     Processes text containing both Chinese and English using Jieba.
     Uses combined stopwords (loaded Chinese + NLTK English + custom).
@@ -150,6 +150,24 @@ def process_text_mixed_chinese_english(text, custom_stopwords=None):
     if not JIEBA_AVAILABLE:
         # This should ideally be caught earlier, but double-check
         raise RuntimeError("Jieba library is required for Chinese/Mixed processing but not installed.")
+
+    # --- !!! ADD USER WORDS TO JIEBA DICTIONARY FOR THIS RUN !!! ---
+    if user_dict_words and isinstance(user_dict_words, list):
+        added_count = 0
+        for word in user_dict_words:
+            if isinstance(word, str) and word.strip():
+                # Add word with default frequency calculation.
+                # Jieba will calculate frequency based on its internal model,
+                # which is usually sufficient to prevent splitting.
+                # For finer control, jieba.add_word(word, freq=10000, tag='un') could be used.
+                jieba.add_word(word.strip())
+                added_count += 1
+        if added_count > 0:
+            logging.info(f"Added {added_count} custom words to Jieba dictionary for this request.")
+    elif user_dict_words:
+         logging.warning(f"Received 'user_dict_words' but it was not a list: {type(user_dict_words)}. Ignoring.")
+    # --- END USER WORD ADDITION ---
+
 
     # 1. Cleaning: Lowercase English, keep relevant characters, remove digits, normalize spaces.
     text = text.lower()
@@ -243,6 +261,9 @@ def generate_wordcloud_route():
     # Get custom stopwords list from request, default to empty list
     custom_stopwords = data.get('custom_stopwords', [])
 
+     # --- !!! GET USER DICT WORDS !!! ---
+    user_dict_words = data.get('user_dict_words', []) # Default to empty list
+
     # WordCloud visual options with defaults
     shape = data.get('shape', 'rectangle').lower()
     try:
@@ -272,6 +293,9 @@ def generate_wordcloud_route():
         return jsonify({"error": "Invalid language specified. Use 'en' or 'zh'."}), 400
     if not isinstance(custom_stopwords, list):
          return jsonify({"error": "custom_stopwords must be a list of strings."}), 400
+    # --- !!! VALIDATE user_dict_words IS A LIST !!! ---
+    if not isinstance(user_dict_words, list):
+        return jsonify({"error": "'user_dict_words' must be a list of strings."}), 400
 
 
     # --- Determine and Validate Font Path ---
@@ -300,7 +324,7 @@ def generate_wordcloud_route():
                 # Service Unavailable or Not Implemented seems appropriate
                 return jsonify({"error": "Server configuration error: Jieba library needed for Chinese processing is missing."}), 503
             # Pass the request-specific custom stopwords
-            word_counts = process_text_mixed_chinese_english(raw_text, custom_stopwords)
+            word_counts = process_text_mixed_chinese_english(raw_text, custom_stopwords, user_dict_words)
         elif language == 'en':
              # Pass the request-specific custom stopwords
              word_counts = process_text_nltk(raw_text, custom_stopwords)
