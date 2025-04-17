@@ -259,6 +259,9 @@ def generate_wordcloud_route():
     font_path_req = data.get('font_path', None)
     # Mode: RGBA recommended for masks/transparency
     mode = data.get('mode', 'RGBA')
+    # Get colormap from request, default to 'tab20'
+    colormap_name = data.get('colormap', 'tab20')
+    logging.info(f"Using colormap: {colormap_name}") # Log which colormap is being used
 
     # --- Input Validation ---
     if not raw_text or not isinstance(raw_text, str) or not raw_text.strip():
@@ -355,6 +358,7 @@ def generate_wordcloud_route():
             mask=mask_array,            # Apply mask if created
             mode=mode,
             scale=scale,
+            colormap=colormap_name,
             # Add other potential parameters here if needed in the future
             # e.g., prefer_horizontal, color_func, contour_width, etc.
         )
