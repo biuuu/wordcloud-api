@@ -1,0 +1,34 @@
+# requirements.txt for the Word Cloud Generation Service
+
+# Core web framework
+Flask
+
+# Word cloud generation library
+wordcloud
+
+# Chinese text segmentation library (required for language='zh')
+jieba
+
+# Natural Language Toolkit (used for English tokenization and stopwords)
+# Note: After installing nltk, you might need to download its data models.
+# Run python and execute:
+# import nltk
+# nltk.download('punkt')
+# nltk.download('stopwords')
+nltk
+
+# Image processing library (often required by wordcloud for saving images)
+Pillow
+
+# --- Optional: For Production Deployment ---
+# If deploying with Gunicorn (recommended over Flask's built-in server)
+# gunicorn
+
+
+# === Notes ===
+# 1. This file lists the direct dependencies. Run `pip install -r requirements.txt` to install them.
+# 2. For reproducible builds (recommended for production), freeze the exact versions
+#    in your working environment using: `pip freeze > requirements.txt`
+#    This will add version numbers (e.g., Flask==2.1.2).
+# 3. Ensure the NLTK data ('punkt', 'stopwords') is downloaded in the deployment environment
+#    if you rely on NLTK's functionality.
