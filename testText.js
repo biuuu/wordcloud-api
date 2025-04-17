@@ -65,20 +65,20 @@ async function main() {
       一个语料库中的其中一份文件的重要程度。Jieba库提供了方便的实现。词云图是数据可视化的好方法。
   `;
   const customWords = ["自然语言处理", "命名实体识别", "词性标注", "TF-IDF", "词云图"];
-  const customStopwords = ["例如", "一个", "一种", "一份", "许多", "评估"]; // Add more domain-specific stopwords
 
   try {
       console.log("\n--- Generating Word Cloud using TF-IDF ---");
       const result = await generateWordCloudViaPython(sampleChineseText, {
           language: 'zh',
           extraction_method: 'tfidf', // Specify TF-IDF method
-          top_k: 50,                 // How many top keywords to extract
+          top_k: 100,                 // How many top keywords to extract
           user_dict_words: customWords,
-          custom_stopwords: customStopwords,
-          colormap: 'viridis', // Viridis often works well with TF-IDF visuals
-          background_color: 'white',
-          width: 1000,
-          height: 600,
+          shape: 'ellipse',
+          width: 800, height: 500,
+          background_color: null, // Use a solid background for CQ image
+          mode: 'RGBA', // RGBA for transparency support if needed, though white bg makes it less critical
+          scale: 2,
+          colormap: 'tab20',
           scale: 2
       });
       console.log(`Word Cloud URL: ${result.imageUrl}`);
