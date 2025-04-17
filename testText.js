@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const PYTHON_SERVICE_URL = 'http://localhost:5000'; // Adjust if needed
+const PYTHON_SERVICE_URL = 'http://192.168.33.6:5000'; // Adjust if needed
 
 /**
  * Calls the Python service to generate a word cloud from raw text.
@@ -58,50 +58,36 @@ async function generateWordCloudViaPython(rawText, options = {}) {
 
 // --- Usage Example ---
 async function main() {
-    const sampleEnglishText = `
-        Node.js is an open-source, cross-platform, back-end JavaScript runtime environment
-        that runs on the V8 engine and executes JavaScript code outside a web browser.
-        Node.js lets developers use JavaScript to write command line tools and for server-side
-        scripting—running scripts server-side to produce dynamic web page content before the
-        page is sent to the user's web browser. Consequently, Node.js represents a "JavaScript everywhere"
-        paradigm, unifying web application development around a single programming language,
-        rather than different languages for server-side and client-side scripts.
-        Python is also very popular for backend development and data science. API design is important.
-    `;
+  const sampleChineseText = `
+      自然语言处理（NLP）是人工智能（AI）和语言学领域的分支学科。此领域探讨如何处理及运用自然语言；
+      自然语言认知则是让电脑“懂”人类的语言。其涵盖了许多不同的技术，例如分词、词性标注、命名实体识别、
+      情感分析、文本摘要和机器翻译等。TF-IDF是一种常用的关键词提取算法，用于评估一个词对于一个文件集或
+      一个语料库中的其中一份文件的重要程度。Jieba库提供了方便的实现。词云图是数据可视化的好方法。
+  `;
+  const customWords = ["自然语言处理", "命名实体识别", "词性标注", "TF-IDF", "词云图"];
+  const customStopwords = ["例如", "一个", "一种", "一份", "许多", "评估"]; // Add more domain-specific stopwords
 
-    const sampleChineseText = `我今天使用了词云生成器，效果很棒。Node.js调用Python服务也很方便。`;
+  try {
+      console.log("\n--- Generating Word Cloud using TF-IDF ---");
+      const result = await generateWordCloudViaPython(sampleChineseText, {
+          language: 'zh',
+          extraction_method: 'tfidf', // Specify TF-IDF method
+          top_k: 50,                 // How many top keywords to extract
+          user_dict_words: customWords,
+          custom_stopwords: customStopwords,
+          colormap: 'viridis', // Viridis often works well with TF-IDF visuals
+          background_color: 'white',
+          width: 1000,
+          height: 600,
+          scale: 2
+      });
+      console.log(`Word Cloud URL: ${result.imageUrl}`);
+      console.log(`Extraction Method Used: ${result.extraction_method_used}`);
+      console.log(`Word Count: ${result.wordCount}`);
 
-    const customWords = ["词云生成器", "Node.js"];
-
-    try {
-        // console.log("\n--- Generating English Word Cloud ---");
-        // const resultEn = await generateWordCloudViaPython(sampleEnglishText, {
-        //     language: 'en',
-        //     width: 1000,
-        //     height: 500,
-        //     background_color: 'white',
-        //     custom_stopwords: ['javascript', 'web'], // Add custom words to ignore
-        // });
-        // console.log(`English Word Cloud URL: ${resultEn.imageUrl} (Words: ${resultEn.wordCount})`);
-
-        console.log("\n--- Generating Chinese Word Cloud ---");
-        // IMPORTANT: Ensure the font path set in Python supports Chinese!
-        const resultZh = await generateWordCloudViaPython(sampleChineseText, {
-            language: 'zh',
-            user_dict_words: customWords,
-            shape: 'ellipse', // Specify the shape
-            width: 800, height: 500, // Mask canvas size (rectangular for ellipse)
-            background_color: null, // AliceBlue background (will fill ellipse)
-            mode: 'RGBA', // Still use RGBA if you want clean edges
-            scale: 2,
-            colormap: 'tab20'
-        });
-        console.log(`Chinese Word Cloud URL: ${resultZh.imageUrl} (Words: ${resultZh.wordCount})`);
-
-    } catch (error) {
-        console.error('\n--- ERROR ---');
-        console.error(error.message);
-    }
+  } catch (error) {
+      console.error('\n--- ERROR ---');
+      console.error(error.message);
+  }
 }
-
 main();
