@@ -132,10 +132,12 @@ def calculate_message_tfidf(messages, combined_stopwords, top_k=200):
         tokens = jieba.cut(cleaned_msg)
 
         # Filter tokens using the combined stopword list and length check
-        filtered_tokens = [
-            word for word in tokens
-            if (word := word.strip()) and word not in combined_stopwords and len(word) > 1
-        ]
+        filtered_tokens = []
+        for token in tokens:
+            word = token.strip() # Strip whitespace first
+            # Apply filters: non-empty, not stopword, length > 1
+            if word and word not in combined_stopwords and len(word) > 1:
+                filtered_tokens.append(word)
 
         if filtered_tokens:
             # Update total term frequency
@@ -210,10 +212,12 @@ def process_text_chinese_frequency(text, combined_stopwords):
     tokens = jieba.cut(cleaned_text)
 
     # Filter tokens based on stopwords and length
-    words = [
-        word for token in tokens
-        if (word := token.strip()) and word not in combined_stopwords and len(word) > 1
-    ]
+    words = []
+    for token in tokens:
+        word = token.strip() # Strip first
+        # Apply filters
+        if word and word not in combined_stopwords and len(word) > 1:
+            words.append(word)
 
     if not words: logging.warning(f"Frequency method yielded no words after processing and filtering.")
     # Return a frequency count of the valid words
