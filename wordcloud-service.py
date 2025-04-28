@@ -99,11 +99,7 @@ app = Flask(__name__)
 def clean_chinese_text(text):
     """Basic cleaning: Keep Chinese characters and spaces."""
     if not isinstance(text, str): return ""
-    # Keep Chinese Unicode range (\u4e00-\u9fff) and whitespace (\s)
-    cleaned_text = re.sub(r'[^\u4e00-\u9fff\s]', '', text)
-    # Normalize multiple spaces/newlines to single spaces
-    cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
-    return cleaned_text
+    return text
 
 # --- Text Processing Function (Message TF-IDF) ---
 def calculate_message_tfidf(messages, combined_stopwords, top_k=200):
