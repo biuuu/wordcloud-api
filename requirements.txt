@@ -14,7 +14,7 @@ Pillow
 
 # --- Optional: For Production Deployment ---
 # If deploying with Gunicorn (recommended over Flask's built-in server)
-# gunicorn
+gunicorn
 
 
 # === Notes ===
